@@ -198,7 +198,6 @@ var app = {
 		
 		let modal = document.getElementById('ReviewModal');
 		modal.classList.remove('active');
-
 		//		HTMLHANDLER.addEventListener("Update",function(){
 		//			console.log("Called CustomEvent Update");
 		//			return HTMLHANDLER.createReviewsList();
