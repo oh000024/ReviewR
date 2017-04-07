@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://griffis.edumedia.ca  'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content: griffis.edumedia.ca  placeholdit.imgix.net placehold.it ;" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+
+    <!-- Include the compiled Ratchet CSS -->
+    <link href="css/ratchet.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <title>Giftr</title>
+
+</head>
+
+<body>
+    <header class="bar bar-nav">
+        <a class="btn btn-link btn-nav pull-left" href="index.html">
+            <span class="icon icon-left-nav"></span> Back
+        </a>
+        <a href="#giftModal" class="btn btn-link btn-nav pull-right">
+                Add Idea
+                <span class="icon icon-plus"></span>
+            </a>
+        <h1 class="title">GIFTR</h1>
+    </header>
+
+    <div class="content" id="cameraPage">
+        <!-- read through localStorage for contacts -->
+        <ul class="table-view" id="review-list">
+            <!--
+               <li class="table-view-cell media">
+                <span class="pull-right icon icon-trash midline"></span>-->
+                <!-- tap to process delete 
+                <div class="media-body">
+                    Gift Idea 1
+                    <p>Best Buy</p>
+                </div>
+            </li>
+            <li class="table-view-cell media">
+                <span class="pull-right icon icon-trash midline"></span>
+                <!-- tap to process delete 
+                <div class="media-body">
+                    Gift Idea 2
+                    <p><a href="#" target="_blank">http://www.example.com/</a></p>
+                    <p>$15.99</p>
+                </div>
+            </li>
+            <li class="table-view-cell media">
+                <span class="pull-right icon icon-trash midline"></span>
+                <!-- tap to process delete 
+                <div class="media-body">
+                    Gift Idea 3
+                    <p>LCBO</p>
+                    <p><a href="#" target="_blank">http://www.lcbo.com/</a></p>
+                    <p>$99.99</p>
+                </div>
+            </li> -->
+        </ul>
+    </div>
+
+    <div id="giftModal" class="modal">
+        <header class="bar bar-nav">
+            <a class="icon icon-close pull-right" href="#giftModal"></a>
+            <h1 class="title">Add Idea</h1>
+        </header>
+
+        <div class="content">
+            <p class="content-padded" id="tname">
+                Name of person you are buying gifts for
+            </p>
+            <div class="content-padded">
+                <form class="input-group">
+
+                    <div class="input-row">
+                        <label>Gift idea</label>
+                        <input type="text" id="giftidea" placeholder="idea" />
+                    </div>
+                    <div class="input-row">
+                        <label>Store</label>
+                        <input type="text" id="at" placeholder="where to find it" />
+                    </div>
+                    <div class="input-row">
+                        <label>URL</label>
+                        <input type="url" id="url" placeholder="http://www.example.com/" />
+                    </div>
+                    <div class="input-row">
+                        <label>Cost</label>
+                        <input type="text" id = "cost" placeholder="$14.99" />
+                    </div>
+
+                </form>
+                <p class="content-padded">
+                    <button class="btn btn-block">
+                        <span class="icon icon-close"></span> Cancel
+                        <!-- dispatch click to the close button -->
+                    </button>
+                    <button class="btn btn-primary btn-block">
+                        <span class="icon icon-check"></span> Save
+                        <!-- process the info then dispatch click to the close button -->
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <!-- include the compiled Ratchet JS -->
+    <script src="js/ratchet.min.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>

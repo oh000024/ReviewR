@@ -1,0 +1,113 @@
+*{
+    /**padding: 0;
+    margin: 0;
+    box-sizing: border-box; **/
+}
+:root{
+    font-size: calc(1.5vh + 1.5vw + 1vmin);
+}
+body{
+    font-size: 1.0rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    height: 100vh;
+}
+
+span.name{
+    float:left;
+    width: 60%;
+    font-size: 0.9rem;
+    /**padding: 0.5rem 0;
+    margin: 0; **/
+    overflow: hidden;
+    color: #333;
+}
+span.dob{
+    font-size: 0.7rem;
+    color: #666;
+}
+.midline{
+    position: absolute;
+    top: 40%;
+    right: 5%;
+}
+.msg{
+  color: #666; /* default */
+  font-weight: bold;
+  border-style: solid;
+  border-width: 1px;
+  padding: 0.5rem 2rem;
+  opacity: 0;
+  -webkit-transition: opacity 0.6s ease-in;
+  transition: opacity 0.6s ease-in;
+}
+.good{
+  color: #bada55;
+  border-color: #bada55;
+  opacity: 1;
+}
+.bad{
+  color: #990000;
+  border-color: #990000;
+  opacity: 1;
+}
+.info{
+  color: #3399cc;
+  border-color: #3399CC;
+  opacity: 1;
+}
+img{
+	width: 80px;
+	height: 80px;
+}
+#ReviewModal .input-row label{
+	width: 20%;
+}
+#DeleteReviewModal img{
+	width: 100%;
+	height: 300px;
+	margin: 0 auto;
+}
+.mid-thumb img{
+	width: 100%;
+	height: 300px;
+	margin: 0 auto;
+	display: none;
+}
+
+.star{
+  color: goldenrod;
+  font-size: 1.6rem;
+  position: relative;
+  padding: 0 .7rem; /* space out the stars */
+}
+.star::before{
+  position:absolute;
+  top:20px;
+  left:10px;
+  content: '\2606';
+  cursor: pointer;
+}
+.star:hover::before{
+  /* the :hover should come first */
+  content: '\2605' !important;
+  color: #bada55;
+}
+.star.rated::before{
+  /* the :hover should come first */
+  content: '\2605' !important;
+}
+
+.star.reviewp{
+  color: goldenrod;
+  font-size: 1.6rem;
+  position: relative;
+  padding: 0 .7rem; /* space out the stars */
+}
+.star.reviewp::before{
+  position:absolute;
+  top:15px;
+  left:0;
+  content: '\2606';
+  cursor: pointer;
+}
+

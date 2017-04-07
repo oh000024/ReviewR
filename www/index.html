@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://griffis.edumedia.ca  'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src * data: content: griffis.edumedia.ca  placeholdit.imgix.net placehold.it ;" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="msapplication-tap-highlight" content="no" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+
+	<!-- Include the compiled Ratchet CSS -->
+	<link href="css/ratchet.min.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<title>ReviewR</title>
+
+</head>
+
+<body>
+	<header class="bar bar-nav">
+		<a class="btn btn-link btn-nav pull-right" href="#ReviewModal">
+                Write Review
+                <span class="icon icon-compose"></span>
+            </a>
+		<h1 class="title">ReviewR</h1>
+	</header>
+	<!--
+        <nav class="bar bar-tab">
+            <a class="tab-item">
+                <span class="icon icon-plus"></span>
+                <span class="tab-label">Add Person</span>
+            </a>
+        </nav>
+        -->
+	<div class="content" id="reviewListPage">
+		<!-- read through localStorage for contacts -->
+		<ul class="table-view" id="contact-list">
+			<li class="table-view-cell media">
+				<a class="navigate-right" href="#DeleteReviewModal">
+
+					<img class="media-object pull-left" src="">
+					<div class="media-body">
+						Item 1
+						<p>Lorem</p>
+					</div>
+
+				</a>
+
+			</li>
+		</ul>
+	</div>
+
+	<div id="ReviewModal" class="modal">
+		<header class="bar bar-nav">
+			<a class="icon icon-close pull-right" href="#ReviewModal"></a>
+			<h1 class="title">Add Review</h1>
+		</header>
+
+		<div class="content">
+			<div class="content-padded">
+				<div class="mid-thumb">
+					<img src="" id="thumbnail">
+				</div>
+				<form class="input-group">
+
+					<div class="input-row">
+						<label>Item</label>
+						<input type="text" id="name" placeholder="First Last" />
+					</div>
+					<div class="input-row">
+						<label>Rating</label>
+<!--						<input type="text" id="rate" />-->
+						<div class="stars">
+						  <span class="star">&nbsp;</span>
+						  <span class="star">&nbsp;</span>
+						  <span class="star">&nbsp;</span>
+						  <span class="star">&nbsp;</span>
+						  <span class="star">&nbsp;</span>
+						</div>
+					</div>
+				</form>
+				<p class="content-padded">
+
+					<button class="btn btn-primary btn-block">
+                        <span class="icon icon-play"></span> Take a Picture
+                        <!-- process the info then dispatch click to the close button -->
+                    </button>
+
+					<button class="btn btn-block" id="cancel">
+                        <span class="icon icon-close"></span> Cancel
+                        <!-- dispatch click to the close button -->
+                    </button>
+					<button class="btn btn-positive btn-block btn-outlined" id=save>
+                        <span class="icon icon-check"></span> Save
+                        <!-- dispatch click to the close button -->
+                    </button>
+				</p>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="DeleteReviewModal" class="modal">
+		<header class="bar bar-nav">
+
+			<a class="icon icon-close pull-right" href="#DeleteReviewModal"></a>
+			<h1 class="title">Delete Review</h1>
+						<a class="icon icon-left-nav pull-left" href="#"></a>
+		</header>
+
+		<div class="content" id="delreview">
+			<div class="content-padded">
+				<p class="content-padded">
+					<!--				<a><img class="media-object pull-left" src="http://placehold.it/300x300">sdfas</a>-->
+				</p>
+				<p class="content-padded">
+
+					<button class="btn btn-negative btn-block" id="delete">
+                    <span class="icon icon-check"></span> Delete
+                    <!-- process the info then dispatch click to the close button -->
+                </button>
+				</p>
+			</div>
+		</div>
+
+	</div>
+
+
+	<script type="text/javascript" src="cordova.js"></script>
+	<!-- include the compiled Ratchet JS -->
+	<script src="js/ratchet.min.js"></script>
+	<script src="js/index.js"></script>
+</body>
+
+</html>
