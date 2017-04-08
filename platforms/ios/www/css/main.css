@@ -110,4 +110,11 @@ img{
   content: '\2606';
   cursor: pointer;
 }
+.fadeout {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0s .5s, opacity .5s ease-in-out;
+  transition: visibility 0s .5s, opacity .5s ease-in-out;
+}
+
 

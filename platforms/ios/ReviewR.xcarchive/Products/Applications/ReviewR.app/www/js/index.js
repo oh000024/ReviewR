@@ -10,20 +10,7 @@ Updated: Apr 3, 2017
 *****************************************************************/
 const MYKEY = "reviewr-oh000024";
 
-let greviews = [
-	{
-		"id": 237428374,
-		"name": "Timmies",
-		"rating": 4,
-		"img": "path/and/filename/on/device.png"
-	},
-	{
-		"id": 123987944,
-		"name": "Starbucks",
-		"rating": 4,
-		"img": "path/and/filename/on/device.png"
-	}
-];
+let greviews = [];
 
 var grating = 1;
 var stars = null;
@@ -95,7 +82,6 @@ var app = {
 		//MODALHANDLER.init();
 		GSTORAGE.init();
 
-
 		let camBtn = window.document.querySelector('.btn.btn-primary.btn-block');
 		camBtn.addEventListener('touchstart', this.onCamera);
 
@@ -110,31 +96,49 @@ var app = {
 		let leftche  = window.document.querySelector("a.icon.icon-left-nav.pull-left");
 		leftche.addEventListener('touchstart',(function(mname){return function(){app.onCancel(mname);}})("DeleteReviewModal"));
 
+		let addReview= window.document.querySelector(".btn.btn-link.btn-nav.pull-right");
+		addReview.addEventListener("touchstart",function(){
+			HTMLHANDLER.clearModal();
+		});
 		//window.addEventListener('push', app.pageChanged);
 		  stars = document.querySelectorAll('.star');
   		  addListeners();
-  		  setRating(); //based on global rating variable value
+  		  //setRating(); //based on global rating variable value
 
 		HTMLHANDLER.createReviewsList();
 	},
 	onDelete: function (par, target) {
+	
+		let _pro = new Promise(
+			function(resolve,reject){
+				
+				console.log("Before count: " + GSTORAGE.gdata.length);
 
-		console.log("Before count: " + GSTORAGE.gdata.length);
+				app.generateMessage("#delreview","info","Review Deleted");
+				GSTORAGE.gdata = GSTORAGE.gdata.filter(function (p) {
+					return p.id != greviewId;
+				});
+				localStorage.setItem(MYKEY, JSON.stringify(GSTORAGE.gdata));
 
-		GSTORAGE.gdata = GSTORAGE.gdata.filter(function (p) {
-			return p.id != greviewId;
-		});
-		localStorage.setItem(MYKEY, JSON.stringify(GSTORAGE.gdata));
+				let review = document.querySelector("#DeleteReviewModal div.content-padded");
+				review.firstElementChild.classList.add("fadeout");
 
-		greviewId = 0;
-		par.removeChild(target);
+				greviewId = 0;
+				par.removeChild(par.childNodes[0]);
 
-		console.log("After count: " + GSTORAGE.gdata.length);
+				console.log("After count: " + GSTORAGE.gdata.length);	
+				setTimeout(function(){
+					resolve();
+				},400);
+			});
 		
-//		let event = new CustomEvent('touchstart');
-		
-		this.onCancel("DeleteReviewModal");
-		HTMLHANDLER.createReviewsList();
+		_pro.then(function(){
+			app.onCancel("DeleteReviewModal");
+			HTMLHANDLER.createReviewsList();
+		})
+		.catch(function(mesage){
+			   alert(message);
+			   })
 		
 	},
 	onCancel: function (m) {
@@ -154,7 +158,7 @@ var app = {
 			app.generateMessage(e.message);
 		}finally{
 		greviewId=0;
-		grating=0;
+		grating=1;
 		}
 
 	},
@@ -165,18 +169,19 @@ var app = {
 		//let retname = name &&0xff;
 		//let retrating = rating && 0xff;
 		if (!(name && 0xff)) {
-			app.generateMessage("Please enter name");
+			app.generateMessage("#ReviewModal div.content","bad","Please enter Item");
 			return;
 		}
-		if (rating && 0xff) {
-			if (!regNumber.test(rating)) {
-				throw new Error("Please,enter only number.");
-				return;
-			}
-		} else {
-			throw new Error("Please,enter rating.");
-			return;
-		}
+//		if (rating && 0xff) {
+//			if (!regNumber.test(rating)) {
+//				//throw new Error("Please,enter only number.");
+//				//app.generateMessage("Please enter Item");
+//				return;
+//			}
+//		} else {
+//			throw new Error("Please,enter rating.");
+//			return;
+//		}
 
 		let review = Object.create(REVIEW);
 		if (review === null) {
@@ -198,7 +203,6 @@ var app = {
 		
 		let modal = document.getElementById('ReviewModal');
 		modal.classList.remove('active');
-
 		//		HTMLHANDLER.addEventListener("Update",function(){
 		//			console.log("Called CustomEvent Update");
 		//			return HTMLHANDLER.createReviewsList();
@@ -206,7 +210,7 @@ var app = {
 		//		let evetn = new CustomEvent("Update");
 		//		HTMLHANDLER.dispatchEvent(event);
 		HTMLHANDLER.createReviewsList();
-		grating = 0;
+		grating = 1;
 	},
 	onCamera: function () {
 		console.log("Operating a camera");
@@ -232,46 +236,34 @@ var app = {
 		let thumb = document.querySelector(".mid-thumb");
 		let img = document.querySelector("img#thumbnail");
 		img.src = imagepath;
-		//		img.width="150px";
-		//		img.height="150px";
 
-		//thumb.style.visibility="visible";
 		thumb.style.display="block";
 		img.style.display = "block";
-		console.log(imageData);
+		//console.log(imageData);
 
-		//this.generateMessage();
 	},
-	onError: function (message) {
-		console.log(message);
+	onError: function (obj,type="bad",message) {
+//		console.log(message);
+		app.generateMessage(obj,type="bad",message);
 	},
-	generateMessage: function (message) {
-		let mcontent = window.document.querySelector('div.content');
-		let mcontentpad = window.document.querySelector('div.content-padded');
+	generateMessage: function (obj,type="bad",message) {
+		let mcontent = window.document.querySelector(obj);
+		//let mcontentpad = window.document.querySelector('#ReviewModal div.content-padded');
 		let div = document.createElement('div');
 
 		div.classList.add('msg');
 		setTimeout(function () {
-			div.classList.add("bad");
+			div.classList.add(type);
 		}, 20); //delay before adding the class to trigger transition
 
-		div.textContent = "asdfasf"; //message===null?"Unknown Error":message;
+		div.textContent = message===null?"Unknown Error":message;
 
-		mcontent.insertBefore(div, mcontentpad);
+		mcontent.insertBefore(div, mcontent.firstElementChild[0]);
 		setTimeout((function (m, d) {
 			return function () {
 				m.removeChild(d);
 			}
 		})(mcontent, div), 3210);
-	},
-	pageChanged: function (ev) {
-		console.log('pageChanged' + " ");
-		console.trace(globalPersonId);
-		switch (id) {
-			case "reviewListPage":
-				HTMLHANDLER.createReviewsList;
-				break;
-		}
 	}
 };
 const GSTORAGE = {
@@ -316,25 +308,6 @@ const GSTORAGE = {
 		}
 	},
 
-	// for when name or dob updated...
-	updatePerson: function (person) {
-		try {
-			//			for (let i = 0, j = this.gdata.length; i < j; i++) {
-			//				if (person.id == this.gdata[i].id) {
-			//					console.log("Update person name: " + this.gdata[i].name + ", to :" + person.name + "," + "ID: " + this.gdata[i].id);
-			//					this.gdata[i] = person;
-			//					this.sortData(this.gdata);
-			//					localStorage.setItem(MYKEY, JSON.stringify(this.gdata));
-			//					break;
-			//				}
-			//				console.log("Contine");
-			console.log("Update Picture");
-			//}
-		} catch (e) {
-			console.log(e.message);
-		}
-	},
-
 	// When Gifts was updated..
 	deleteReview: function (id) {
 		try {
@@ -363,7 +336,7 @@ const HTMLHANDLER = {
 			ul.innerHTML = "";
 			for (let item of GSTORAGE.gdata) {
 
-				console.log("review: " + item.img);
+				//console.log("review: " + item.img);
 
 				let li = document.createElement("li");
 				let aNav = document.createElement("a");
@@ -375,7 +348,6 @@ const HTMLHANDLER = {
 
 				aNav.classList.add("navigate-right");
 				aNav.href = "#DeleteReviewModal";
-
 
 				// To set up Uniq ID
 				let att = document.createAttribute("data-id");
@@ -452,6 +424,14 @@ const HTMLHANDLER = {
 			HTMLHANDLER.generateMessage(e.message);
 		}
 
+	},
+	clearModal:function(){
+		let name = document.getElementById("name").value;
+		name.value="";
+		grating	= 1;//document.getElementById("rate").value;
+		imagepath="";
+		navigator.camera.cleanup(function(){}, app.onError);
+	
 	}
 
 }
