@@ -14,6 +14,14 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "ca.edumedia.oh000024.myapp"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "ca.edumedia.oh000024.myapp"
+        },
+        "cordova-plugin-save-image": {
+            "CAMERA_USAGE_DESCRIPTION": " ",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "ca.edumedia.oh000024.myapp"
         }
     },
     "dependent_plugins": {

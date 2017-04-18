@@ -18,20 +18,9 @@ var stars = null;
 let regNumber = /^[0-5]$/;
 let greviewId = 0;
 let imagepath = "";
-var messages = [
-	{
-		"type": "bad",
-		"msg": "We are out of beer"
-	},
-	{
-		"type": "good",
-		"msg": "I just ordered pizza"
-	},
-	{
-		"type": "info",
-		"msg": "Today is Friday"
-	}
-];
+
+let BASE64="data:image/png;base64,";
+
 var REVIEW = {
 	id: '',
 	name: '',
@@ -46,22 +35,18 @@ function addListeners(){
       console.log('adding listener', index);
       return function(){
         grating = idx + 1;  
-        console.log('Rating is now', grating)
         setRating();
       }
     })(index));
   });
-  
 }
 
 function setRating(){
   [].forEach.call(stars, function(star, index){
     if(grating > index){
       star.classList.add('rated');
-      console.log('added rated on', index );
     }else{
       star.classList.remove('rated');
-      console.log('removed rated on', index );
     }
   });
 }
@@ -91,18 +76,20 @@ var app = {
 
 		let saveBtn = window.document.querySelector('#save.btn.btn-positive');
 		saveBtn.addEventListener('touchstart', this.onSave);
+				
+		window.document.querySelector("a.icon.icon-left-nav.pull-left").addEventListener('touchstart',(function(mname){return function(){app.onCancel(mname);}})("DeleteReviewModal"));
 		
-		
-		let leftche  = window.document.querySelector("a.icon.icon-left-nav.pull-left");
-		leftche.addEventListener('touchstart',(function(mname){return function(){app.onCancel(mname);}})("DeleteReviewModal"));
-
-		let addReview= window.document.querySelector(".btn.btn-link.btn-nav.pull-right");
-		addReview.addEventListener("touchstart",function(){
+		window.document.querySelector(".btn.btn-link.btn-nav.pull-right").addEventListener("touchstart",function(){
 			HTMLHANDLER.clearModal();
 		});
+		
+		window.document.querySelector("#ReviewModal a.icon.icon-close.pull-right").addEventListener("touchstart",function(){
+			app.onCancel("");
+		});
+			
 		//window.addEventListener('push', app.pageChanged);
-		  stars = document.querySelectorAll('.star');
-  		  addListeners();
+	   stars = document.querySelectorAll('.star');
+	   addListeners();
   		  //setRating(); //based on global rating variable value
 
 		HTMLHANDLER.createReviewsList();
@@ -114,7 +101,7 @@ var app = {
 				
 				console.log("Before count: " + GSTORAGE.gdata.length);
 
-				app.generateMessage("#delreview","info","Review Deleted");
+				//app.generateMessage("#delreview","info","Review Deleted");
 				GSTORAGE.gdata = GSTORAGE.gdata.filter(function (p) {
 					return p.id != greviewId;
 				});
@@ -129,7 +116,7 @@ var app = {
 				console.log("After count: " + GSTORAGE.gdata.length);	
 				setTimeout(function(){
 					resolve();
-				},400);
+				},500);
 			});
 		
 		_pro.then(function(){
@@ -152,72 +139,70 @@ var app = {
 				p.removeChild(p.firstElementChild);
 			}
 		}
+			//else{
+//			navigator.camera.cleanup(function(){}, app.onError);
+//		}
+
 		let modal = document.getElementById(m);
 		modal.classList.remove('active');
 		} catch(e){
 			app.generateMessage(e.message);
 		}finally{
-		greviewId=0;
-		grating=1;
+			greviewId=0;
+			grating=1;
+			
+			HTMLHANDLER.clearModal();
 		}
 
 	},
 	onSave: function () {
-		console.log("called onSave");
-		let name = document.getElementById("name").value;
-		let rating = grating;//document.getElementById("rate").value;
-		//let retname = name &&0xff;
-		//let retrating = rating && 0xff;
-		if (!(name && 0xff)) {
-			app.generateMessage("#ReviewModal div.content","bad","Please enter Item");
-			return;
-		}
-//		if (rating && 0xff) {
-//			if (!regNumber.test(rating)) {
-//				//throw new Error("Please,enter only number.");
-//				//app.generateMessage("Please enter Item");
-//				return;
-//			}
-//		} else {
-//			throw new Error("Please,enter rating.");
-//			return;
-//		}
+		
+		try{
+			console.log("called onSave");
+			let name = document.getElementById("name").value;
+			let rating = grating;//document.getElementById("rate").value;
 
-		let review = Object.create(REVIEW);
-		if (review === null) {
+			if (!(name && 0xff)) {
+				app.generateMessage("#ReviewModal form.input-group","bad","Please enter a name of Item");
+				return;
+			}
+			
+			if(!(imagepath && 0xff)){
+			   	app.generateMessage("#ReviewModal form.input-group","bad","Please take a picture for Item")
+			   	return;
+			   }
+		
+			//console.log(newPath);	
+			let review = Object.create(REVIEW);
+			review.name = name;
+			review.rating = rating;
+			review.id = Date.now();
+			review.img = imagepath;//newPath;
+
+			GSTORAGE.saveReview(review);
+		
+			let modalpad = document.querySelector("#ReviewModal p.content-padded");
+			modalpad.removeChild(modalpad.firstElementChild);
+			
+			HTMLHANDLER.createReviewsList();
+			grating = 1;
+			imagepath="";			
+			let modal = document.getElementById('ReviewModal');
+			
+			modal.classList.remove('active');
+//			navigator.camera.cleanup(function(){}, app.onError);
+
+		}catch(e){
 			app.generateMessage("Create Object Error.Try it again");
-			return;
 		}
-		review.name = name;
-		review.rating = rating;
-		review.id = Date.now();
-		review.img = imagepath;
-
-		GSTORAGE.saveReview(review);
-
-		let thumb = document.querySelector(".mid-thumb");
-		let img = document.querySelector("img#thumbnail");
-		
-		thumb.style.display="none";
-		img.style.display = "none";
-		
-		let modal = document.getElementById('ReviewModal');
-		modal.classList.remove('active');
-		//		HTMLHANDLER.addEventListener("Update",function(){
-		//			console.log("Called CustomEvent Update");
-		//			return HTMLHANDLER.createReviewsList();
-		//		});
-		//		let evetn = new CustomEvent("Update");
-		//		HTMLHANDLER.dispatchEvent(event);
-		HTMLHANDLER.createReviewsList();
-		grating = 1;
 	},
+
 	onCamera: function () {
 		console.log("Operating a camera");
 
 		var options = {
 			quality: 80,
-			destinationType: Camera.DestinationType.DATA_URL,
+			destinationType: Camera.DestinationType.FILE_URI,
 			encodingType: Camera.EncodingType.PNG,
 			mediaType: Camera.MediaType.PICTURE,
 			pictureSourceType: Camera.PictureSourceType.CAMERA,
@@ -228,18 +213,22 @@ var app = {
 		navigator.camera.getPicture(app.onSuccess, app.onError, options);
 	},
 	onSuccess: function (imageData) {
-		console.log("successfull.");
-		//var image = document.querySelector("media-object");
-		//app.generateMessage(imageData);
-		//.src = imageData;
-		imagepath = "data:image/png;base64," + imageData; //"data:image/jpeg;base64,"
-		let thumb = document.querySelector(".mid-thumb");
-		let img = document.querySelector("img#thumbnail");
-		img.src = imagepath;
+		console.log("successfull." +imageData);
+		
+		imagepath = imageData; //"data:image/jpeg;base64,"
+			
+		let img = document.createElement("img");
+		img.classList.add("mid-thumb");
+		
+		let modalpad= document.querySelector("#ReviewModal p.content-padded");
+			
+		img.src = imageData;
+		img.style.width ="100%";
+		img.style.height="100%";
 
-		thumb.style.display="block";
-		img.style.display = "block";
-		//console.log(imageData);
+		//thumb.style.display="block";
+		
+		HTMLHANDLER.replaceBut(img);
 
 	},
 	onError: function (obj,type="bad",message) {
@@ -294,10 +283,6 @@ const GSTORAGE = {
 	saveReview: function (review) {
 		try {
 			console.log("Save Picture");
-			//			if (INVALID_ID == person.id) {
-			//				person.id = Date.now();;
-			//				this.gdata.push(person);
-			//				this.sortData(this.gdata);
 			this.gdata.push(review);
 			localStorage.setItem(MYKEY, JSON.stringify(this.gdata));
 			console.log("Successfully Update : " + review.name + "," + review.rating);
@@ -367,21 +352,31 @@ const HTMLHANDLER = {
 							if (greviewId == GSTORAGE.gdata[i].id) {
 								let review = GSTORAGE.gdata[i];
 								let pad = document.querySelector("#DeleteReviewModal p.content-padded");
+								let div = document.querySelector("#delreview");
 
 								let pName = document.createElement("p");
 								let aName = document.createElement("a");
+								let aP = document.createElement("p");
 
 								let img = document.createElement("img");
 								img.src = review.img;
+								img.style.width="100%";
+								img.style.width="100%";
 
+								pad.classList.remove("fadeout");
 								pName.textContent = review.name;
 								pName.style.fontSize="2.0rem";
 								pName.style.marginTop="1rem";
-								pName.style.marginBottom="1em";
+//								pName.style.marginBottom="1em";
 								
+								HTMLHANDLER.addStar(aP,review.rating);
+								
+								//pad.appendChild(aP);
 								aName.appendChild(img);
+							
 								pad.appendChild(aName);
 								pad.appendChild(pName);
+								pad.appendChild(aP);
 
 								let delBtn = document.querySelector('#delete.btn');
 
@@ -398,20 +393,13 @@ const HTMLHANDLER = {
 
 				aImg.classList.add("media-object", "pull-left");
 				aImg.src = item.img;
+				aImg.style.width="80px";
+				aImg.style.height="80px";
 				aDiv.classList.add("media-body");
 				aDiv.textContent = item.name;
 				//aP.textContent = item.rating;
 				
-				for(let i =0,j=item.rating;i<j;i++){
-					let span = document.createElement("span");
-					//span.textContent = "&nbsp;";
-					span.classList.add('star');
-					span.classList.add('rated');
-					span.classList.add('reviewp');
-					span.style.fontSize="1.6rem";
-					
-					aP.appendChild(span);
-				}
+				HTMLHANDLER.addStar(aP,item.rating);
 				
 				aDiv.appendChild(aP);
 				aNav.appendChild(aImg);
@@ -425,15 +413,43 @@ const HTMLHANDLER = {
 		}
 
 	},
+	addStar:function(par,count){
+		for(let i =0,j=count;i<j;i++){
+		let span = document.createElement("span");
+			//span.textContent = "&nbsp;";
+		span.classList.add('star');
+		span.classList.add('rated');
+		span.classList.add('reviewp');
+			//span.textContent='&#9733';
+		span.style.fontSize="1.6rem";
+		par.appendChild(span);
+		}
+	},
+	replaceBut:function(img){
+		
+		let but = document.querySelector("#ReviewModal button.btn.btn-primary.btn-block");
+		but.style.display = "none";
+		
+		let modalpad = document.querySelector("#ReviewModal p.content-padded");
+		modalpad.insertBefore(img,modalpad.firstElementChild);
+		
+	},
 	clearModal:function(){
-		let name = document.getElementById("name").value;
-		name.value="";
-		grating	= 1;//document.getElementById("rate").value;
+		document.getElementById("name").value="";
+		grating	= 1;
+		setRating();
 		imagepath="";
-		navigator.camera.cleanup(function(){}, app.onError);
-	
-	}
+//		navigator.camera.cleanup(function(){}, app.onError);
+		
+		let img = document.querySelector(".mid-thumb");
+		if(img&&0xff){	
+			let modalpad = document.querySelector("#ReviewModal p.content-padded");
+			modalpad.removeChild(modalpad.firstElementChild);				
+		}
 
+		let but = document.querySelector("#ReviewModal button.btn.btn-primary.btn-block");
+		but.style.display = "block";
+	}
 }
 
 app.init();

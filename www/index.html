@@ -2,7 +2,8 @@
 <html>
 
 <head>
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://griffis.edumedia.ca  'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src * data: content: griffis.edumedia.ca  placeholdit.imgix.net placehold.it ;" />
+<!--	<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://griffis.edumedia.ca  'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src * data: content: griffis.edumedia.ca  placeholdit.imgix.net placehold.it ;" />-->
+	<meta http-equiv="Content-Security-Policy" content="default-src http://griffis.edumedia.ca https://griffis.edumedia.ca 'self' data: gap: ;style-src 'self' 'unsafe-inline' ;img-src 'self' https: " />
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="msapplication-tap-highlight" content="no" />
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
@@ -56,9 +57,9 @@
 
 		<div class="content">
 			<div class="content-padded">
-				<div class="mid-thumb">
-					<img src="" id="thumbnail">
-				</div>
+<!--				<div class="mid-thumb">-->
+<!--					<img src="" id="thumbnail">-->
+<!--				</div>-->
 				<form class="input-group">
 
 					<div class="input-row">
@@ -88,7 +89,7 @@
                         <span class="icon icon-close"></span> Cancel
                         <!-- dispatch click to the close button -->
                     </button>
-					<button class="btn btn-positive btn-block btn-outlined" id=save>
+					<button class="btn btn-positive btn-block" id=save>
                         <span class="icon icon-check"></span> Save
                         <!-- dispatch click to the close button -->
                     </button>
@@ -100,19 +101,15 @@
 
 	<div id="DeleteReviewModal" class="modal">
 		<header class="bar bar-nav">
-
-			<a class="icon icon-close pull-right" href="#DeleteReviewModal"></a>
+			<a href="#DeleteReviewModal"></a>
 			<h1 class="title">Delete Review</h1>
-						<a class="icon icon-left-nav pull-left" href="#"></a>
+			<a class="icon icon-left-nav pull-left" href="#">Back</a>
 		</header>
 
 		<div class="content" id="delreview">
 			<div class="content-padded">
+				<p class="content-padded"></p>
 				<p class="content-padded">
-					<!--				<a><img class="media-object pull-left" src="http://placehold.it/300x300">sdfas</a>-->
-				</p>
-				<p class="content-padded">
-
 					<button class="btn btn-negative btn-block" id="delete">
                     <span class="icon icon-check"></span> Delete
                     <!-- process the info then dispatch click to the close button -->
